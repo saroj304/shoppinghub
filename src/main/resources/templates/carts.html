@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<form th:object="${product}" method="post">
+
+		<div class="conatiner">
+
+			<div>
+				<img alt="" th:src="${'/productimages/' + product.imageName}">
+
+			</div>
+			<div>
+				<h1 th:text=*{name}></h1>
+				<p th:text=*{description}></p>
+				<p th:text=*{price} />
+				<p th:text="*{weight}">
+			</div>
+
+		</div>
+
+
+
+
+
+
+	</form>
+</body>
+</html>

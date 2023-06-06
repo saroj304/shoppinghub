@@ -1,0 +1,27 @@
+<div th:include="adminNavbar.html"></div>
+<div class="container">
+
+    <a th:href="@{/admin/categories/add}" style="margin: 20px 0" class="btn btn-primary">Add Category</a>
+    <table class="table">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">SN</th>
+            <th scope="col">Category Name</th>
+            <th scope="col">Delete</th>
+            <th scope="col">Update</th>
+        </tr>
+        </thead>
+        <tbody>
+<!-- iStat indicate the index of list initially it is o so to set 1 we add 1 to it -->
+        <tr th:each="category, iStat : ${categories}">
+            <th scope="row" th:text="${category.id}"></th>
+            <td th:text="${category.name}"></td>
+            <td><a th:href="@{/admin/categories/delete/{id}(id=${category.id})}" class="btn btn-danger">Delete</a></td>
+            <td><a th:href="@{/admin/categories/update/{id}(id=${category.id})}" class="btn btn-warning">Update</a></td>
+
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
