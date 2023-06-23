@@ -21,7 +21,6 @@ public class CustomUserDetails implements UserDetails {
 
 ////set the user info after fetching from UserDetailservice
 	public CustomUserDetails(User u) {
-
 		this.u = u;
 	}
 
@@ -35,6 +34,10 @@ public class CustomUserDetails implements UserDetails {
 			authoritylist.add(new SimpleGrantedAuthority(r.getRole_name()));
 		}
 		return authoritylist;
+	}
+
+	public String getFname() {
+		return u.getFname();
 	}
 
 	@Override

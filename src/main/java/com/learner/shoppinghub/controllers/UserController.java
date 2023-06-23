@@ -31,7 +31,7 @@ public class UserController {
 			
 			return "login";
 		}
-		System.out.println(authentication.getName());
+		
 		return "home";
 	}
 
