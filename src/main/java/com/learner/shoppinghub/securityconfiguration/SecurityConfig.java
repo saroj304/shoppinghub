@@ -23,7 +23,7 @@ CustomUserDetailsService customUserDetailService;
 	protected void configure(HttpSecurity http) throws Exception {
    http
    .authorizeRequests()
-   .antMatchers("/shop","/register").permitAll()
+   .antMatchers("/shop","/register","/login").permitAll()
    .antMatchers("/admin/**").hasRole("ADMIN")
    .anyRequest()
    .authenticated()
@@ -31,7 +31,7 @@ CustomUserDetailsService customUserDetailService;
    .formLogin()
    .loginPage("/login")
    .loginProcessingUrl("/processlogin")
-   .defaultSuccessUrl("/shop")
+   .defaultSuccessUrl("/home")
    .failureUrl("/login?error=true")
    .usernameParameter("email")
    .passwordParameter("password")

@@ -20,7 +20,6 @@
             <td th:text="${product.name}">Larry</td>
             <td th:text="${product.category.Name}">Larry</td>
             <td><img src="" height="100px" width="100px"  th:src="@{${'/productimages/' + product.imageName}}"></td>
-
             <td><a href="" th:href="@{/admin/product/delete/{id}(id=${product.id})}" class="btn btn-danger">Delete</a></td>
             <td><a href="" th:href="@{/admin/product/update/{id}(id=${product.id})}" class="btn btn-warning">Update</a></td>
 

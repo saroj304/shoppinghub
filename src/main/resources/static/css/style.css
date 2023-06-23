@@ -6,3 +6,16 @@
     border-radius: 54px;
     height:80px;
 }
+.homepageheading{
+	
+	font-size: 2.5rem;
+    text-align: center;
+    font-size: 69px;
+    margin-top: 176px;
+    color: firebrick;
+	
+}
+.homepage{
+	background-image: url("/images/giancarlo-duarte-cTj8vbZeX44-unsplash.jpg");
+	
+}

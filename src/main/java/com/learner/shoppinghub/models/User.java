@@ -1,7 +1,6 @@
 package com.learner.shoppinghub.models;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -15,7 +14,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 
 import org.springframework.stereotype.Component;
 
@@ -27,7 +25,7 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	@Column
-
+     
 	@NotBlank(message = "name field cannot be blank")
 	private String fname;
 	@Column
@@ -35,6 +33,7 @@ public class User {
 	@NotBlank(message = "lname field cannot be blank")
 	private String lname;
 	@Column
+	
 	@Email(message = "please insert a valid email address")
 	private String email;
 	@Column

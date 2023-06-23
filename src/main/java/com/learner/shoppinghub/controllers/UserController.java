@@ -3,6 +3,8 @@ package com.learner.shoppinghub.controllers;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -23,7 +25,14 @@ public class UserController {
 
 	@GetMapping("/login")
 	public String loginPage() {
-		return "login";
+		//donot let the user to logiin again if he/she is already logged in
+		Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
+		if(authentication.getName().equalsIgnoreCase("anonymoususer")) {
+			
+			return "login";
+		}
+		System.out.println(authentication.getName());
+		return "home";
 	}
 
 	@GetMapping("/register")
