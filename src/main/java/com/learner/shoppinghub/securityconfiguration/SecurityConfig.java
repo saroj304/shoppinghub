@@ -1,29 +1,28 @@
 package com.learner.shoppinghub.securityconfiguration;
 
+import com.learner.shoppinghub.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-import com.learner.shoppinghub.service.CustomUserDetailsService;
+import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
-@Autowired
-CustomUserDetailsService customUserDetailService;
-
+public class SecurityConfig {
+    @Autowired
+    CustomUserDetailsService customUserDetailService;
+/*
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
    http
-   .authorizeRequests()
-   .antMatchers("/shop","/register","/login").permitAll()
+   .authorizeHttpRequests()
+//   place /static/** or images/** for user who are not logged in can access the static images 
+   .antMatchers("/shop","/register","/login","/forgotpassword","/processforgoutpassword","/images/**","/productimages/**","/shop/viewproduct/**").permitAll()
    .antMatchers("/admin/**").hasRole("ADMIN")
    .anyRequest()
    .authenticated()
@@ -31,7 +30,7 @@ CustomUserDetailsService customUserDetailService;
    .formLogin()
    .loginPage("/login")
    .loginProcessingUrl("/processlogin")
-   .defaultSuccessUrl("/home")
+   .defaultSuccessUrl("/home", true)
    .failureUrl("/login?error=true")
    .usernameParameter("email")
    .passwordParameter("password")
@@ -62,6 +61,7 @@ CustomUserDetailsService customUserDetailService;
 	public DaoAuthenticationProvider daoAuthenticationProvider()
 	{
 		DaoAuthenticationProvider daoauth=new DaoAuthenticationProvider();
+		//daoauthentication 
 		daoauth.setUserDetailsService(customUserDetailService);
 		daoauth.setPasswordEncoder(passwordEncoder());
 		return daoauth;
@@ -81,9 +81,47 @@ CustomUserDetailsService customUserDetailService;
 	//ignore the endpoints inside this method means Endpoints specified in this method will be ignored by Spring Security, meaning it will by-pass the Spring Security Filter Chain and no security context will be set.
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-	    web.ignoring().antMatchers("/resources/**");
+		  web.ignoring().antMatchers("/resources/**");
+		  
 	}
-	
-	
-	
+	*/
+@Bean
+public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    http
+            .authorizeHttpRequests(auth -> auth
+                    // For publicly accessible static resources and specific endpoints
+                    .requestMatchers("/shop", "/register", "/login", "/forgotpassword", "/processforgoutpassword", "/images/**", "/productimages/**", "/shop/viewproduct/**").permitAll()
+                    .requestMatchers("/admin/**").hasRole("ADMIN")
+                    .anyRequest()
+                    .authenticated()
+            )
+            .formLogin(form -> form
+                    .loginPage("/login")
+                    .loginProcessingUrl("/perform_login")
+                    .defaultSuccessUrl("/home", true)
+                    .failureUrl("/login?error=true")
+                    .usernameParameter("email")
+                    .passwordParameter("password")
+                    .permitAll()
+            )
+            .logout(logout -> logout
+                    .logoutUrl("/logout")
+                    .invalidateHttpSession(true)
+                    .deleteCookies("JSESSIONID")
+            )
+            .csrf(csrf -> csrf.disable());
+
+    return http.build(); // Build the HttpSecurity configuration
+}
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+@Bean
+public UserDetailsService getCustomUserDetailService() {
+    return new CustomUserDetailsService();
+}
+
 }

@@ -11,4 +11,5 @@ import com.learner.shoppinghub.models.User;
 public interface UserRepo extends JpaRepository<User, Integer> {
 	@Query("SELECT u FROM User u WHERE u.email = :email")
 	public User findByEmail(String email);
+
 }

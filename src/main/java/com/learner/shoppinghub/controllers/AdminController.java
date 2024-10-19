@@ -2,7 +2,10 @@ package com.learner.shoppinghub.controllers;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,8 +20,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.learner.shoppinghub.models.Category;
 import com.learner.shoppinghub.models.Product;
+import com.learner.shoppinghub.models.Role;
+import com.learner.shoppinghub.models.User;
+import com.learner.shoppinghub.repository.RoleRepository;
 import com.learner.shoppinghub.service.CategoryService;
 import com.learner.shoppinghub.service.ProductService;
+import com.learner.shoppinghub.service.UserService;
 
 @Controller
 public class AdminController {
@@ -27,6 +34,10 @@ public class AdminController {
 	CategoryService categoryservice;
 	@Autowired
 	ProductService productservice;
+	@Autowired
+	UserService userservice;
+	@Autowired
+	RoleRepository rolerepo;
 
 	@GetMapping("/admin")
 	public String adminPage() {
@@ -78,7 +89,7 @@ public class AdminController {
 	@GetMapping("/admin/products")
 	public String adminPageProducts(Model model) {
 		List<Product> products = productservice.displayProducts();
-		model.addAttribute("products", products);	
+		model.addAttribute("products", products);
 		return "products";
 	}
 
@@ -94,7 +105,6 @@ public class AdminController {
 	public String addProduct(@ModelAttribute("productdto") Product productdto,
 			@RequestParam("productimage") MultipartFile image) throws IOException {
 		if (!image.isEmpty()) {
-			System.err.println("hello budddddddy");
 			System.out.println(image.getBytes());
 
 			// save the image under the folder path with original name
@@ -130,4 +140,26 @@ public class AdminController {
 //		productservice.updateProduct(id);
 		return "productsAdd";
 	}
+
+//manage users
+	@GetMapping("/admin/users")
+	public String manageUser(Model m) {
+		List<User> u = userservice.getUser();
+		m.addAttribute("user", u);
+		return "users";
+	}
+
+	@GetMapping("/admin/user/edit/{userId}")
+	public String editUser(@PathVariable int userId, Model model) {
+//		Optional<User> u = userservice.findById(userId);
+		model.addAttribute("user", userservice.findById(userId));
+		return "editUser";
+	}
+
+	@GetMapping("/admin/user/delete/{deleteid}")
+	public String deleteUser(@PathVariable int deleteid) {
+		userservice.deleteById(deleteid);
+		return "redirect:/admin/users";
+	}
+
 }

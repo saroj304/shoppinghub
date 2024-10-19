@@ -1,0 +1,17 @@
+<div th:include="adminNavbar.html"></div>
+<body>
+	<table border="1px solid black"  align="center">
+		<th>Email</th>
+		<th>FirstName</th>
+		<th>LastName</th>
+		<th>role</th>
+		<th>Action</th>
+		<tr th:each="value : ${user}">
+			<td th:text="${value.email}"/>
+			<td th:text="${value.fname}"/>
+			<td th:text="${value.lname}"/>
+			<td th:each="roles:${value.getRole}" th:text="${roles.role_name}"/>
+			<td> <a th:href="@{/admin/user/edit/{userId}(userId=${value.id})}"><span>Edit</span></span></a> <a th:href="@{/admin/user/delete/{deleteid}(deleteid=${value.id})}"><span>Delete</span></a> </td>
+		</tr>
+	</table>
+</body>
