@@ -1,38 +1,63 @@
 <div th:include="Navbar.html"></div>
-	<div class="container" style="margin-top: 30px">
-		<div class="row">
-			<div class="col-sm-3" height="100%">
-				<h4>Categories</h4>
-				<ul class="list-group">
-					<a th:href="@{/shop}">
-						<li class="list-group-item">All Products</li>
-					</a>
-					<a href="" th:each="category, iStat : ${categories}"
-						th:href="@{/shop/category/{id}(id=${category.id})}"><li
-						class="list-group-item" th:text="${category.name}"></li></a>
-				</ul>
-			</div>
-			<div class="col-sm-9">
-				<div class="row">
-					<div class="col-sm-3" style="margin-top: 20px"
-						th:each="product , count : ${products}">
 
-						<img class="" height="150px" width="150px"
-							th:src="@{${'/productimages/' + product.imageName}}"
-							th:alt="${product.name}">
+<div class="container" style="margin-top: 30px">
+	<div class="row">
+		<!-- Categories Sidebar -->
+		<div class="col-md-3">
+			<h4 class="mb-3">Categories</h4>
+			<ul class="list-group">
+				<a th:href="@{/shop}" class="list-group-item list-group-item-action">All Products</a>
+				<a href="" th:each="category : ${categories}"
+				   th:href="@{/shop/category/{id}(id=${category.id})}"
+				   class="list-group-item list-group-item-action"
+				   th:text="${category.name}"></a>
+			</ul>
+		</div>
+
+		<!-- Product Display Section -->
+		<div class="col-md-9">
+			<div class="row">
+				<div class="col-lg-4 col-md-6 mb-4" th:each="product : ${products}">
+					<div class="card h-100 shadow-sm">
+						<img class="card-img-top p-3" height="200" th:src="@{${'/productimages/' + product.imageName}}" th:alt="${product.name}">
 
 						<div class="card-body">
 							<h5 class="card-title" th:text="${product.name}"></h5>
-							<h4>
+							<h4 class="text-primary">
 								₹ <span th:text="${product.price}"></span>
 							</h4>
-							<p th:text="${product.description}">saroj khatiwada is a java
-								developer</p>
-							<a href="#" th:href="@{/shop/viewproduct/{id}(id=${product.id})}"
-								class="btn btn-primary">View Product</a>
+							<p class="card-text text-muted" th:text="${product.description}">Product description here</p>
+							<a href="#" th:href="@{/shop/viewproduct/{id}(id=${product.id})}" class="btn btn-primary mt-3 w-100">View Product</a>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+</div>
+
+<!-- Additional CSS for styling -->
+<style>
+	/* Sidebar category styling */
+	.list-group-item {
+		transition: all 0.3s ease;
+	}
+	.list-group-item:hover {
+		background-color: #007bff;
+		color: white;
+	}
+
+	/* Product card styling */
+	.card {
+		border: none;
+		transition: transform 0.3s ease, box-shadow 0.3s ease;
+	}
+	.card:hover {
+		transform: translateY(-5px);
+		box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+	}
+
+	.card-title {
+		font-weight: bold;
+	}
+</style>

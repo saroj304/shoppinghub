@@ -19,7 +19,7 @@ import com.learner.shoppinghub.models.User;
 import com.learner.shoppinghub.service.CategoryService;
 import com.learner.shoppinghub.service.ProductService;
 
-@RestController
+@Controller
 public class HomeController {
     @Autowired
     private ProductService productservice;
@@ -36,13 +36,7 @@ public class HomeController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = ((CustomUserDetails) authentication.getPrincipal()).getFname();
         model.addAttribute("name", name);
-
-//	      List<Product>product= productservice.displayProducts();
-//	      float noofproduct=(float)(product.size());
-//	      int noofslide= (int) ((noofproduct/4.0f)+Math.ceil((noofproduct/4.0f)- (int)(noofproduct/4)));
-//	     //sending integer noof slide from controller to view
-//	      model.addAttribute("data",noofslide);
-        return "index";
+        return "shop";
     }
 
     @GetMapping("/shop")

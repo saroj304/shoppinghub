@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,136 +31,142 @@ import com.learner.shoppinghub.service.UserService;
 @Controller
 public class AdminController {
 
-	@Autowired
-	CategoryService categoryservice;
-	@Autowired
-	ProductService productservice;
-	@Autowired
-	UserService userservice;
-	@Autowired
-	RoleRepository rolerepo;
+    @Autowired
+    CategoryService categoryservice;
+    @Autowired
+    ProductService productservice;
+    @Autowired
+    UserService userservice;
+    @Autowired
+    RoleRepository rolerepo;
 
-	@GetMapping("/admin")
-	public String adminPage() {
-		return "adminHome";
-	}
+    @GetMapping("/admin")
+    public String adminPage() {
+        return "adminHome";
+    }
 
-	@GetMapping("/admin/categories")
-	public String adminPageCategories(Model model) {
-		List<Category> category = categoryservice.getAll();
-		model.addAttribute("categories", category);
-		return "categories";
-	}
+    @GetMapping("/admin/categories")
+    public String adminPageCategories(Model model) {
+        List<Category> category = categoryservice.getAll();
+        model.addAttribute("categories", category);
+        return "categories";
+    }
 
-//rendering to category page
-	@GetMapping("/admin/categories/add")
-	public String adminPageAddCategories(@ModelAttribute("category") Category category) {
-		return "categoriesAdd";
+    //rendering to category page
+    @GetMapping("/admin/categories/add")
+    public String adminPageAddCategories(@ModelAttribute("category") Category category) {
+        return "categoriesAdd";
 
-	}
+    }
 
-// adding new category 
-	@PostMapping("/admin/categories/add")
-	public String adminPageSaveCategories(@ModelAttribute("category") Category category) {
-		System.out.println("adding category");
-		categoryservice.addCategory(category);
-		return "redirect:/admin/categories";
+    // adding new category
+    @PostMapping("/admin/categories/add")
+    public String adminPageSaveCategories(@ModelAttribute("category") Category category) {
+        System.out.println("adding category");
+        categoryservice.addCategory(category);
+        return "redirect:/admin/categories";
 
-	}
+    }
 
-// deleting the category
-	@GetMapping("/admin/categories/delete/{id}")
-	public String deleteCategory(@PathVariable("id") int id) {
-		categoryservice.deleteCategory(id);
-		return "redirect:/admin/categories";
-	}
+    // deleting the category
+    @GetMapping("/admin/categories/delete/{id}")
+    public String deleteCategory(@PathVariable("id") int id) {
+        categoryservice.deleteCategory(id);
+        return "redirect:/admin/categories";
+    }
 
-	// updating the category by id
-	@GetMapping("/admin/categories/update/{id}")
-	public String updateCategory(@PathVariable("id") int id, Model model) {
+    // updating the category by id
+    @GetMapping("/admin/categories/update/{id}")
+    public String updateCategory(@PathVariable("id") int id, Model model) {
 
-		model.addAttribute("category", categoryservice.findCategoryById(id));
+        model.addAttribute("category", categoryservice.findCategoryById(id));
 
-		return "categoriesAdd";
+        return "categoriesAdd";
 
-	}
+    }
 
-	// Product section
+    // Product section
 //get the products from the db and display in product page
-	@GetMapping("/admin/products")
-	public String adminPageProducts(Model model) {
-		List<Product> products = productservice.displayProducts();
-		model.addAttribute("products", products);
-		return "products";
-	}
+    @GetMapping("/admin/products")
+    public String adminPageProducts(Model model) {
+        List<Product> products = productservice.displayProducts();
+        model.addAttribute("products", products);
+        return "products";
+    }
 
-	@GetMapping("/admin/products/add")
-	public String getproductPage(@ModelAttribute("productdto") Product productdto, Model model) {
+    @GetMapping("/admin/products/add")
+    public String getproductPage(@ModelAttribute("productdto") Product productdto, Model model) {
 //		now to find all the categories
-		List<Category> category = categoryservice.getAll();
-		model.addAttribute("categories", category);
-		return "productsAdd";
-	}
+        List<Category> category = categoryservice.getAll();
+        model.addAttribute("categories", category);
+        return "productsAdd";
+    }
 
-	@PostMapping("/admin/products/add")
-	public String addProduct(@ModelAttribute("productdto") Product productdto,
-			@RequestParam("productimage") MultipartFile image) throws IOException {
-		if (!image.isEmpty()) {
-			System.out.println(image.getBytes());
+    @PostMapping("/admin/products/add")
+    public String addProduct(@ModelAttribute("productdto") Product productdto,
+                             @RequestParam("productimage") MultipartFile image) throws IOException {
+        if (!image.isEmpty()) {
+            System.out.println(image.getBytes());
 
-			// save the image under the folder path with original name
-			FileOutputStream fout = new FileOutputStream(
-					"src/main/resources/static/productimages/" + image.getOriginalFilename());
-			System.out.println(image.getBytes());
-			fout.write(image.getBytes());
-			String imagename = image.getOriginalFilename();
+            // save the image under the folder path with original name
+            FileOutputStream fout = new FileOutputStream(
+                    "src/main/resources/static/productimages/" + image.getOriginalFilename());
+            System.out.println(image.getBytes());
+            fout.write(image.getBytes());
+            String imagename = image.getOriginalFilename();
 //			getting the image name and saving to product table
-			productdto.setImageName(imagename);
-			productservice.saveProduct(productdto);
-			System.out.println(productdto.getCategory());
-			fout.close();
-			return "redirect:/admin/products";
-		}
-		return "productsAdd";
-	}
+            productdto.setImageName(imagename);
+            productservice.saveProduct(productdto);
+            System.out.println(productdto.getCategory());
+            fout.close();
+            return "redirect:/admin/products";
+        }
+        return "productsAdd";
+    }
 
-	// deleting product by id
-	@GetMapping("/admin/product/delete/{id}")
-	public String deleteProduct(@PathVariable("id") int id) {
-		productservice.deleteProduct(id);
-		return "redirect:/admin/products";
-	}
+    // deleting product by id
+    @GetMapping("/admin/product/delete/{id}")
+    public String deleteProduct(@PathVariable("id") int id) {
+        productservice.deleteProduct(id);
+        return "redirect:/admin/products";
+    }
 
-//update product by id
-	@GetMapping("/admin/product/update/{id}")
-	public String updateProduct(@PathVariable("id") int id, Model model) {
-		Product p = productservice.findById(id);
-		List<Category> category = categoryservice.getAll();
-		model.addAttribute("categories", category);
-		model.addAttribute("productdto", p);
+    //update product by id
+    @GetMapping("/admin/product/update/{id}")
+    public String updateProduct(@PathVariable("id") int id, Model model) {
+        Product p = productservice.findById(id);
+        List<Category> category = categoryservice.getAll();
+        model.addAttribute("categories", category);
+        model.addAttribute("productdto", p);
 //		productservice.updateProduct(id);
-		return "productsAdd";
-	}
+        return "productsAdd";
+    }
 
-//manage users
-	@GetMapping("/admin/users")
-	public String manageUser(Model m) {
-		List<User> u = userservice.getUser();
-		m.addAttribute("user", u);
-		return "users";
-	}
+    //manage users
+    @GetMapping("/admin/fetch_users")
+    public String fetchUser(Model m) {
+        List<User> u = userservice.getUser();
+        m.addAttribute("user", u);
+        return "users";
+    }
 
-	@GetMapping("/admin/user/edit/{userId}")
-	public String editUser(@PathVariable int userId, Model model) {
-//		Optional<User> u = userservice.findById(userId);
-		model.addAttribute("user", userservice.findById(userId));
-		return "editUser";
-	}
+    @GetMapping("/admin/user/edit/{userId}")
+    public String editUser(@PathVariable int userId, Model model) {
+        Optional<User> userEntity = userservice.findById(userId);
+        userEntity.orElseThrow(() -> new UsernameNotFoundException("user with the id" + userId + " not found"));
+        model.addAttribute("user", userEntity);
+        return "editUser";
+    }
 
-	@GetMapping("/admin/user/delete/{deleteid}")
-	public String deleteUser(@PathVariable int deleteid) {
-		userservice.deleteById(deleteid);
-		return "redirect:/admin/users";
-	}
+    @GetMapping("/admin/user/delete/{userId}")
+    public String deleteUser(@PathVariable int userId ) {
+       try {
+           userservice.deleteById(userId);
+       }
+       catch (Exception e) {
+           throw new UsernameNotFoundException("user with the id "+ userId + " not found");
+       }
+        return "redirect:/admin/users";
+    }
 
 }

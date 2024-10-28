@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "product")
+
 public class Product {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,7 +22,6 @@ public class Product {
 	private String description;
 	@Column
 	private String imageName;
-
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Category category;
 
