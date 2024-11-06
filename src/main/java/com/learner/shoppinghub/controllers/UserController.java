@@ -25,20 +25,20 @@ public class UserController {
 	@Autowired
 	private UserService userservice;
 	@Autowired
-	private BCryptPasswordEncoder passwordencoder;
+	private BCryptPasswordEncoder passwordEncoder;
 	@Autowired
-    private RoleRepository rolerepo;
+    private RoleRepository roleRepo;
 
 	@GetMapping("/login")
 	public String loginPage() {
 		// don't let the user to login again if he/she is already logged in
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication.getName().equalsIgnoreCase("anonymousUser")) {
-           System.out.println("anonymous user logging");
+             System.out.println("anonymous user logging");
 			return "login";
 		}
 
-		return "index";
+		return "landing_page";
 	}
 
 	@GetMapping("/register")
@@ -53,8 +53,8 @@ public class UserController {
 			return "register";
 		}
 		List<Role> role=new ArrayList<>();
-		user.setPassword(passwordencoder.encode(user.getPassword()));
-		role.add(rolerepo.findById(2).get());
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		role.add(roleRepo.findById(2).get());
 		user.setRole(role);
 		userservice.SaveUser(user);
 		return "redirect:/login";
@@ -70,7 +70,7 @@ public class UserController {
 		String oldpassword=(String) req.getParameter("oldpassword");
 		String newpassword=(String) req.getParameter("newpassword");
 		String confirmnewpassword=(String) req.getParameter("confirmnewpassword");
-		String oldpassword1=passwordencoder.encode(oldpassword);
+		String oldpassword1=passwordEncoder.encode(oldpassword);
 //     	User u=	userrepo.findByPassword(oldpassword1);
    
 		return null;

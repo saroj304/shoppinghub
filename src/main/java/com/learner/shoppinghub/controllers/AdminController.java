@@ -1,108 +1,95 @@
 package com.learner.shoppinghub.controllers;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.learner.shoppinghub.models.Category;
 import com.learner.shoppinghub.models.Product;
-import com.learner.shoppinghub.models.Role;
 import com.learner.shoppinghub.models.User;
 import com.learner.shoppinghub.repository.RoleRepository;
 import com.learner.shoppinghub.service.CategoryService;
 import com.learner.shoppinghub.service.ProductService;
 import com.learner.shoppinghub.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
 
 @Controller
+@RequestMapping("/admin")
 public class AdminController {
 
     @Autowired
-    CategoryService categoryservice;
-    @Autowired
-    ProductService productservice;
-    @Autowired
-    UserService userservice;
-    @Autowired
-    RoleRepository rolerepo;
+    private CategoryService categoryService;
 
-    @GetMapping("/admin")
+    @Autowired
+    private ProductService productService;
+
+    @Autowired
+    private UserService userService;
+
+    @RequestMapping("/admin_page")
     public String adminPage() {
-        return "adminHome";
+        return "adminHome"; // Return the view for the admin home page
     }
 
-    @GetMapping("/admin/categories")
+    @GetMapping("/categories")
     public String adminPageCategories(Model model) {
-        List<Category> category = categoryservice.getAll();
-        model.addAttribute("categories", category);
-        return "categories";
+        List<Category> categories = categoryService.getAll(); // Fetch all categories
+        model.addAttribute("categories", categories); // Add categories to the model
+        return "categories"; // Return the view for categories
     }
 
-    //rendering to category page
-    @GetMapping("/admin/categories/add")
+    @GetMapping("/categories/add")
     public String adminPageAddCategories(@ModelAttribute("category") Category category) {
         return "categoriesAdd";
-
     }
 
     // adding new category
-    @PostMapping("/admin/categories/add")
+    @PostMapping("/categories/add")
     public String adminPageSaveCategories(@ModelAttribute("category") Category category) {
         System.out.println("adding category");
-        categoryservice.addCategory(category);
+        categoryService.addCategory(category);
         return "redirect:/admin/categories";
-
     }
 
     // deleting the category
-    @GetMapping("/admin/categories/delete/{id}")
+    @GetMapping("/categories/delete/{id}")
     public String deleteCategory(@PathVariable("id") int id) {
-        categoryservice.deleteCategory(id);
+        categoryService.deleteCategory(id);
         return "redirect:/admin/categories";
     }
 
     // updating the category by id
-    @GetMapping("/admin/categories/update/{id}")
+    @GetMapping("/categories/update/{id}")
     public String updateCategory(@PathVariable("id") int id, Model model) {
-
-        model.addAttribute("category", categoryservice.findCategoryById(id));
-
+        model.addAttribute("category", categoryService.findCategoryById(id));
         return "categoriesAdd";
 
     }
 
     // Product section
 //get the products from the db and display in product page
-    @GetMapping("/admin/products")
+    @GetMapping("/products")
     public String adminPageProducts(Model model) {
-        List<Product> products = productservice.displayProducts();
+        List<Product> products = productService.displayProducts();
         model.addAttribute("products", products);
         return "products";
     }
 
-    @GetMapping("/admin/products/add")
+    @GetMapping("/products/add")
     public String getproductPage(@ModelAttribute("productdto") Product productdto, Model model) {
 //		now to find all the categories
-        List<Category> category = categoryservice.getAll();
+        List<Category> category = categoryService.getAll();
         model.addAttribute("categories", category);
         return "productsAdd";
     }
 
-    @PostMapping("/admin/products/add")
+    @PostMapping("/products/add")
     public String addProduct(@ModelAttribute("productdto") Product productdto,
                              @RequestParam("productimage") MultipartFile image) throws IOException {
         if (!image.isEmpty()) {
@@ -116,7 +103,7 @@ public class AdminController {
             String imagename = image.getOriginalFilename();
 //			getting the image name and saving to product table
             productdto.setImageName(imagename);
-            productservice.saveProduct(productdto);
+            productService.saveProduct(productdto);
             System.out.println(productdto.getCategory());
             fout.close();
             return "redirect:/admin/products";
@@ -125,17 +112,17 @@ public class AdminController {
     }
 
     // deleting product by id
-    @GetMapping("/admin/product/delete/{id}")
+    @GetMapping("/product/delete/{id}")
     public String deleteProduct(@PathVariable("id") int id) {
-        productservice.deleteProduct(id);
+        productService.deleteProduct(id);
         return "redirect:/admin/products";
     }
 
     //update product by id
-    @GetMapping("/admin/product/update/{id}")
+    @GetMapping("/product/update/{id}")
     public String updateProduct(@PathVariable("id") int id, Model model) {
-        Product p = productservice.findById(id);
-        List<Category> category = categoryservice.getAll();
+        Product p = productService.findById(id);
+        List<Category> category = categoryService.getAll();
         model.addAttribute("categories", category);
         model.addAttribute("productdto", p);
 //		productservice.updateProduct(id);
@@ -143,29 +130,28 @@ public class AdminController {
     }
 
     //manage users
-    @GetMapping("/admin/fetch_users")
+    @GetMapping("/fetch_users")
     public String fetchUser(Model m) {
-        List<User> u = userservice.getUser();
+        List<User> u = userService.getUser();
         m.addAttribute("user", u);
         return "users";
     }
 
-    @GetMapping("/admin/user/edit/{userId}")
+    @GetMapping("/user/edit/{userId}")
     public String editUser(@PathVariable int userId, Model model) {
-        Optional<User> userEntity = userservice.findById(userId);
+        Optional<User> userEntity = userService.findById(userId);
         userEntity.orElseThrow(() -> new UsernameNotFoundException("user with the id" + userId + " not found"));
         model.addAttribute("user", userEntity);
         return "editUser";
     }
 
-    @GetMapping("/admin/user/delete/{userId}")
-    public String deleteUser(@PathVariable int userId ) {
-       try {
-           userservice.deleteById(userId);
-       }
-       catch (Exception e) {
-           throw new UsernameNotFoundException("user with the id "+ userId + " not found");
-       }
+    @GetMapping("/user/delete/{userId}")
+    public String deleteUser(@PathVariable int userId) {
+        try {
+            userService.deleteById(userId);
+        } catch (Exception e) {
+            throw new UsernameNotFoundException("user with the id " + userId + " not found");
+        }
         return "redirect:/admin/users";
     }
 

@@ -1,40 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Login</title>
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<!-- Custom CSS -->
+	<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- Navbar -->
 <div th:include="Navbar.html"></div>
+
 <div class="container">
-	<div class="row">
-		<div class="col-sm-6">
-			<h2>Welcome to LoginPage</h2>
-			<p>Please fill out this form to login</p>
-			<form th:action="@{/perform_login}" method="post">
-				<div th:if="${param.error}" class="alert alert-error text-danger">
-					Invalid username or password.</div>
-
-				<div class="form-group">
-					<label for="email">Email</label> <input type="email" name="email"
-						id="email" placeholder=" Email"
-						class="form-control form-control-lg">
+	<div class="row justify-content-center">
+		<div class="col-sm-8 col-md-6 col-lg-4">
+			<div class="login-card">
+				<h2 class="text-center">Welcome Back!</h2>
+				<p class="text-center">Please enter your details to log in.</p>
+				<form th:action="@{/perform_login}" method="post">
+					<div th:if="${param.error}" class="alert alert-danger text-center">
+						Invalid username or password!
+					</div>
+					<div class="form-group">
+						<label for="email">Email</label>
+						<input type="email" name="email" id="email" placeholder="Email" class="form-control form-control-lg">
+					</div>
+					<div class="form-group">
+						<label for="password">Password</label>
+						<input type="password" name="password" id="password" placeholder="Password" class="form-control form-control-lg">
+					</div>
+					<button type="submit" class="btn btn-primary btn-lg btn-block">Login</button>
+					<div class="text-center mt-3">
+						<span>Don't have an account? <a class="linkControl" th:href="@{/register}">Register here</a></span>
+						<br>
+						<a th:href="@{/forgotpassword}" class="linkControl">Forgot password?</a>
+					</div>
+				</form>
+				<div class="text-center my-3">
+					<h5>OR</h5>
 				</div>
-
-				<div class="form-group">
-					<label for="password">Password</label> <input type="password"
-						class="form-control form-control-lg" placeholder="Password"
-						name="password" id="password">
-				</div>
-
-				<input type="submit" value="Login" class="btn btn-primary btn-block">
-				<br> <span>Don't have an account <a class="linkControl"
-					href="./register.html" th:href="@{/register}">Register here</a></span> <br>
-				<a th:href="@{/forgotpassword}">Forgot password ?</a>
-			</form>
-			<br>
-			<h3>OR</h3>
-			<a href="/oauth2/authorization/google" class="btn btn-primary">Sign-In
-				with google </a>
-
+				<a href="/oauth2/authorization/google" class="btn btn-google btn-lg btn-block">
+					Sign in with Google
+				</a>
+			</div>
 		</div>
-
 	</div>
 </div>
 
-
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.6/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

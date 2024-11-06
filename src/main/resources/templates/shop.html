@@ -1,4 +1,7 @@
-<div th:include="Navbar.html"></div>
+<div data-th-include="Navbar.html"></div>
+
+<!-- Link to external CSS -->
+<link rel="stylesheet" href="/path/to/styles.css">
 
 <div class="container" style="margin-top: 30px">
 	<div class="row">
@@ -19,7 +22,9 @@
 			<div class="row">
 				<div class="col-lg-4 col-md-6 mb-4" th:each="product : ${products}">
 					<div class="card h-100 shadow-sm">
-						<img class="card-img-top p-3" height="200" th:src="@{${'/productimages/' + product.imageName}}" th:alt="${product.name}">
+						<img class="card-img-top p-3"
+							 th:src="@{${'/productimages/' + product.imageName}}"
+							 th:alt="${product.name}">
 
 						<div class="card-body">
 							<h5 class="card-title" th:text="${product.name}"></h5>
@@ -35,29 +40,3 @@
 		</div>
 	</div>
 </div>
-
-<!-- Additional CSS for styling -->
-<style>
-	/* Sidebar category styling */
-	.list-group-item {
-		transition: all 0.3s ease;
-	}
-	.list-group-item:hover {
-		background-color: #007bff;
-		color: white;
-	}
-
-	/* Product card styling */
-	.card {
-		border: none;
-		transition: transform 0.3s ease, box-shadow 0.3s ease;
-	}
-	.card:hover {
-		transform: translateY(-5px);
-		box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-	}
-
-	.card-title {
-		font-weight: bold;
-	}
-</style>

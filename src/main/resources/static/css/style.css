@@ -19,3 +19,229 @@
 	background-image: url("/images/giancarlo-duarte-cTj8vbZeX44-unsplash.jpg");
 	
 }
+
+/* Reset some default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body, html {
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+/* Hero section styling */
+.hero-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: url('https://example.com/guitarstore-background.jpg') no-repeat center center/cover;
+    height: 100vh;
+    color: white;
+    text-align: center;
+}
+
+.hero-content {
+    background: rgba(0, 0, 0, 0.6); /* Adds overlay effect */
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 600px;
+}
+
+.homepage-heading {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+.subheading {
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+}
+
+.cta-button {
+    display: inline-block;
+    padding: 15px 30px;
+    font-size: 1rem;
+    color: white;
+    background-color: #ff6600;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.cta-button:hover {
+    background-color: #cc5200;
+}
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Jumbotron Styling */
+.jumbotron {
+    height: 50vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-shadow: 1px 1px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Card Styling */
+.admin-card {
+    border: none;
+    transition: transform 0.3s ease-in-out;
+    background-color: #f9f9f9;
+}
+
+.admin-card:hover {
+    transform: scale(1.05);
+}
+
+.admin-card .card-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.admin-card .card-title i {
+    font-size: 2rem;
+    color: #ff6600;
+    margin-right: 0.5rem;
+}
+
+.admin-card .btn {
+    font-weight: bold;
+    background-color: #007bff;
+    border: none;
+}
+
+.admin-card .btn:hover {
+    background-color: #0056b3;
+}
+
+/* styles.css */
+
+/* Sidebar category styling */
+.list-group-item {
+    transition: all 0.3s ease;
+}
+
+.list-group-item:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+/* Product card styling */
+.card {
+    border: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.card-title {
+    font-weight: bold;
+}
+
+/* Ensure all images have the same height */
+.card-img-top {
+    height: 200px; /* Fixed height for all images */
+    object-fit: cover; /* Cover to maintain aspect ratio */
+}
+/* Navbar gradient background */
+.navbar {
+    background: linear-gradient(135deg, #007bff, #6610f2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 0.5rem 1rem; /* Adjust as needed */
+
+}
+
+.navbar-brand {
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.navbar-brand:hover {
+    color: #ffdd57;
+}
+
+/* Navbar link styling */
+.nav-link {
+    color: #ffffff !important;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #ffdd57 !important;
+}
+
+/* Cart icon and badge styling */
+.cart-icon {
+    position: relative;
+}
+
+.cart-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: #ff5733;
+    border-radius: 50%;
+    padding: 3px 7px;
+    color: #fff;
+    font-size: 12px;
+}
+
+/* Dropdown menu customization */
+.dropdown-menu {
+    background-color: #007bff;
+    border: none;
+}
+
+.dropdown-item {
+    color: #fff !important;
+    transition: background 0.3s ease;
+}
+
+.dropdown-item:hover {
+    background-color: #6610f2;
+    color: #ffdd57 !important;
+}
+
+/* Button toggler styling */
+.navbar-toggler {
+    border: none;
+}
+/* styles.css */
+
+.container {
+    margin-top: 5%;
+}
+
+.login-card {
+    background-color: #f8f9fa;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-google {
+    background-color: #db4437;
+    color: white;
+    border: none;
+}
+
+.btn-google:hover {
+    background-color: #c23321;
+}
+
+.linkControl {
+    color: #007bff;
+    text-decoration: underline;
+}
